@@ -13,7 +13,7 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.AppCompatActivity;
 import com.rickieyinnovates.juditon.databinding.ActivityMainBinding;
 
-public class MainActivity extends AppCompatActivity {
+public class Dashboard extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
@@ -38,12 +38,18 @@ public class MainActivity extends AppCompatActivity {
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                R.id.nav_home, R.id.nav_banks, R.id.nav_accounts, R.id.nav_vouchers, R.id.nav_receipts)
                 .setOpenableLayout(drawer)
                 .build();
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+
+        /*TextView usernameView = findViewById(R.id.textView);
+        TokenManager tokenManager = TokenManager.getInstance();
+        usernameView.setText(tokenManager.getUsername());*/
+
     }
 
     @Override

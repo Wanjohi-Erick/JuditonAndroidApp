@@ -6,20 +6,32 @@
             app:startDestination="@+id/nav_home">
 
     <fragment
+            android:id="@+id/nav_accounts"
+            android:name="com.rickieyinnovates.juditon.ui.AccountsFragment"
+            android:label="@string/menu_accounts"
+            tools:layout="@layout/fragment_accounts"/>
+    <fragment
             android:id="@+id/nav_home"
-            android:name="com.rickieyinnovates.juditon.ui.home.HomeFragment"
+            android:name="com.rickieyinnovates.juditon.ui.HomeFragment"
             android:label="@string/menu_home"
             tools:layout="@layout/fragment_home"/>
 
     <fragment
-            android:id="@+id/nav_gallery"
-            android:name="com.rickieyinnovates.juditon.ui.gallery.GalleryFragment"
-            android:label="@string/menu_gallery"
-            tools:layout="@layout/fragment_gallery"/>
+            android:id="@+id/nav_banks"
+            android:name="com.rickieyinnovates.juditon.ui.BanksFragment"
+            android:label="@string/menu_banks"
+            tools:layout="@layout/fragment_banks"/>
 
     <fragment
-            android:id="@+id/nav_slideshow"
-            android:name="com.rickieyinnovates.juditon.ui.slideshow.SlideshowFragment"
-            android:label="@string/menu_slideshow"
-            tools:layout="@layout/fragment_slideshow"/>
+            android:id="@+id/nav_receipts"
+            android:name="com.rickieyinnovates.juditon.ui.ReceiptsFragment"
+            android:label="@string/menu_receipts"
+            tools:layout="@layout/fragment_receipts"/>
+
+    <fragment
+            android:id="@+id/nav_vouchers"
+            android:name="com.rickieyinnovates.juditon.ui.VouchersFragment"
+            android:label="@string/menu_vouchers"
+            tools:layout="@layout/fragment_vouchers"/>
+
 </navigation>

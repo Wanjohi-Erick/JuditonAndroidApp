@@ -8,6 +8,11 @@
     <string name="action_settings">Settings</string>
 
     <string name="menu_home">Home</string>
-    <string name="menu_gallery">Gallery</string>
-    <string name="menu_slideshow">Slideshow</string>
+    <string name="menu_finance">Finance</string>
+    <string name="menu_banks">Banks</string>
+    <string name="menu_accounts">Accounts</string>
+    <string name="menu_receipts">Receipts</string>
+    <string name="menu_vouchers">Vouchers</string>
+
+    <string name="menu_slideshow">Hr/Payrolls</string>
 </resources>

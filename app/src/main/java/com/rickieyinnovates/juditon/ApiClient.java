@@ -53,9 +53,14 @@ public class ApiClient {
                     }
                 },
                 error -> {
-                    Log.e(TAG, error.getMessage());
-                    // Notify the callback of an error
-                    callback.onLoginError("Login failed. Check your credentials and try again.");
+                    try {
+                        Log.e(TAG, error.getMessage());
+                        callback.onLoginError(error.getLocalizedMessage());
+                    } catch (Exception e) {
+                        Log.e(TAG, e.getLocalizedMessage());
+                        callback.onLoginError(error.getLocalizedMessage());
+                    }
+
                 });
 
         // Add the request to the queue
@@ -100,11 +105,13 @@ public class ApiClient {
 
     public interface Callback {
         void onSuccess(String response);
+
         void onError(VolleyError error);
     }
 
     public interface LoginCallback {
         void onLoginSuccess(String authToken);
+
         void onLoginError(String errorMessage);
     }
 }

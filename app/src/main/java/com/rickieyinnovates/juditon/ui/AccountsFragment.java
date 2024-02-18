@@ -29,10 +29,6 @@ public class AccountsFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_accounts, container, false);
         RecyclerView recyclerView = root.findViewById(R.id.accountsRecycler);
         List<Account> accountList = new ArrayList<>();
-        AccountsAdapter accountsAdapter = new AccountsAdapter(accountList);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-        recyclerView.setAdapter(accountsAdapter);
 
         ApiClient apiClient = new ApiClient(root.getContext());
         apiClient.makeAuthenticatedGetRequest(root.getContext(), "/finance/chart/get/all", new ApiClient.Callback() {
@@ -41,7 +37,7 @@ public class AccountsFragment extends Fragment {
                 Log.d(TAG, "onSuccess: response: " + response);
                 try {
                     JSONArray jsonArray = new JSONArray(response);
-                    for (int i = 0; i <= jsonArray.length(); i++) {
+                    for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         int id = jsonObject.getInt("id");
                         String name = jsonObject.getString("account");
@@ -49,6 +45,11 @@ public class AccountsFragment extends Fragment {
                         Account account = new Account(id, name);
                         accountList.add(account);
                     }
+
+                    AccountsAdapter accountsAdapter = new AccountsAdapter(accountList);
+                    recyclerView.setHasFixedSize(true);
+                    recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
+                    recyclerView.setAdapter(accountsAdapter);
 
                 } catch (Exception e) {
                     Log.e(TAG, "onSuccess: " + e.getLocalizedMessage());

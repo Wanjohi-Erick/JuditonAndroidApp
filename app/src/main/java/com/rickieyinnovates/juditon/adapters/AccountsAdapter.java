@@ -26,7 +26,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.MyView
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup viewGroup, int i) {
 
-        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_account, viewGroup);
+        View view = LayoutInflater.from(viewGroup.getContext()).inflate(R.layout.custom_account, viewGroup, false);
 
         return new MyViewHolder(view);
     }
@@ -34,7 +34,7 @@ public class AccountsAdapter extends RecyclerView.Adapter<AccountsAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull @NotNull MyViewHolder myViewHolder, int i) {
         myViewHolder.accountView.setText(accountList.get(i).getAccount());
-        myViewHolder.idView.setText(accountList.get(i).getId());
+        //myViewHolder.idView.setText(accountList.get(i).getId());
     }
 
     @Override

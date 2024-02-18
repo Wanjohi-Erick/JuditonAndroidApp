@@ -1,4 +1,4 @@
-package com.rickieyinnovates.juditon.ui;
+package com.rickieyinnovates.juditon.fragments;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -14,24 +14,28 @@ import com.android.volley.VolleyError;
 import com.rickieyinnovates.juditon.ApiClient;
 import com.rickieyinnovates.juditon.R;
 import com.rickieyinnovates.juditon.adapters.AccountsAdapter;
+import com.rickieyinnovates.juditon.adapters.BanksAdapter;
 import com.rickieyinnovates.juditon.models.Account;
+import com.rickieyinnovates.juditon.models.BankAccount;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountsFragment extends Fragment {
+public class BanksFragment extends Fragment {
 
-    private static final String TAG = "AccountsFragment";
+    private static final String TAG = "BanksFragment";
+
+
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_accounts, container, false);
-        RecyclerView recyclerView = root.findViewById(R.id.accountsRecycler);
-        List<Account> accountList = new ArrayList<>();
+        View root = inflater.inflate(R.layout.fragment_banks, container, false);
+        RecyclerView recyclerView = root.findViewById(R.id.banksRecycler);
+        List<BankAccount> bankAccountList = new ArrayList<>();
 
         ApiClient apiClient = new ApiClient(root.getContext());
-        apiClient.makeAuthenticatedGetRequest(root.getContext(), "/finance/chart/get/all", new ApiClient.Callback() {
+        apiClient.makeAuthenticatedGetRequest(root.getContext(), "/finance/banking/get/all", new ApiClient.Callback() {
             @Override
             public void onSuccess(String response) {
                 Log.d(TAG, "onSuccess: response: " + response);
@@ -40,16 +44,19 @@ public class AccountsFragment extends Fragment {
                     for (int i = 0; i < jsonArray.length(); i++) {
                         JSONObject jsonObject = jsonArray.getJSONObject(i);
                         int id = jsonObject.getInt("id");
-                        String name = jsonObject.getString("account");
+                        String accountName = jsonObject.getString("accountName");
+                        String accountNumber = jsonObject.getString("account");
+                        String bankName = jsonObject.getString("bankName");
+                        String type = jsonObject.getString("type");
 
-                        Account account = new Account(id, name);
-                        accountList.add(account);
+                        BankAccount bankAccount = new BankAccount(id, accountName, accountNumber, bankName, type, 0.00);
+                        bankAccountList.add(bankAccount);
                     }
 
-                    AccountsAdapter accountsAdapter = new AccountsAdapter(accountList);
+                    BanksAdapter banksAdapter = new BanksAdapter(bankAccountList);
                     recyclerView.setHasFixedSize(true);
                     recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-                    recyclerView.setAdapter(accountsAdapter);
+                    recyclerView.setAdapter(banksAdapter);
 
                 } catch (Exception e) {
                     Log.e(TAG, "onSuccess: " + e.getLocalizedMessage());
@@ -62,7 +69,6 @@ public class AccountsFragment extends Fragment {
                 Toast.makeText(root.getContext(), error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
         return root;
     }
 

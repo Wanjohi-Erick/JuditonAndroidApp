@@ -6,6 +6,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
+        android:background="@drawable/background"
         tools:context=".Login">
 
     <EditText android:layout_width="match_parent"
@@ -15,6 +16,11 @@
               android:text="admin"
               android:textSize="18sp"
               android:layout_margin="10dp"
+              android:background="@drawable/input_layout"
+              android:textColor="@color/black"
+              android:textColorHint="@color/black"
+              android:drawableStart="@drawable/baseline_person_24"
+              android:drawablePadding="@dimen/padding"
               android:padding="10dp"
               android:inputType="text"/>
 
@@ -23,7 +29,12 @@
               android:id="@+id/password"
               android:hint="Password"
               android:text="1234@#"
+              android:textColor="@color/black"
+              android:textColorHint="@color/black"
+              android:drawableStart="@drawable/baseline_person_24"
+              android:drawablePadding="@dimen/padding"
               android:textSize="18sp"
+              android:background="@drawable/input_layout"
               android:layout_margin="@dimen/margin"
               android:padding="@dimen/padding"
               android:inputType="textPassword"/>

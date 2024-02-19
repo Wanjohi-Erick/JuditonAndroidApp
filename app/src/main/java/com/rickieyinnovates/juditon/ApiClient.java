@@ -18,11 +18,11 @@ public class ApiClient {
     private static final String TAG = "MyApiRequest";
 
     private final RequestQueue requestQueue;
-    private final TokenManager tokenManager;
+    private final ApiDataManager apiDataManager;
 
     public ApiClient(Context context) {
         requestQueue = Volley.newRequestQueue(context);
-        tokenManager = TokenManager.getInstance();
+        apiDataManager = ApiDataManager.getInstance();
     }
 
     public void login(final String username, final String password, final String url, final LoginCallback callback) {
@@ -40,8 +40,8 @@ public class ApiClient {
                         String authToken = response.getString("token");
                         String name = response.getString("username");
 
-                        tokenManager.setAuthToken(authToken);
-                        tokenManager.setUsername(name);
+                        apiDataManager.setAuthToken(authToken);
+                        apiDataManager.setUsername(name);
 
                         Log.d(TAG, "login name: " + name);
 
@@ -74,7 +74,7 @@ public class ApiClient {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + tokenManager.getAuthToken());
+                headers.put("Authorization", "Bearer " + apiDataManager.getAuthToken());
                 return headers;
             }
         };
@@ -95,7 +95,7 @@ public class ApiClient {
             @Override
             public Map<String, String> getHeaders() {
                 Map<String, String> headers = new HashMap<>();
-                headers.put("Authorization", "Bearer " + tokenManager.getAuthToken());
+                headers.put("Authorization", "Bearer " + apiDataManager.getAuthToken());
                 return headers;
             }
         };

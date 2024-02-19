@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.VolleyError;
 import com.rickieyinnovates.juditon.ApiClient;
+import com.rickieyinnovates.juditon.ApiDataManager;
 import com.rickieyinnovates.juditon.R;
 import com.rickieyinnovates.juditon.adapters.AccountsAdapter;
 import com.rickieyinnovates.juditon.listeners.AccountsDataListener;
@@ -61,6 +62,9 @@ public class AccountsFragment extends Fragment implements AccountsDataListener {
                     }
 
                     listener.onAccountsDataReceived(context, accountList);
+
+                    ApiDataManager apiDataManager = ApiDataManager.getInstance();
+                    apiDataManager.setAccountList(accountList);
 
                 } catch (Exception e) {
                     Log.e(TAG, "onSuccess: " + e.getLocalizedMessage());

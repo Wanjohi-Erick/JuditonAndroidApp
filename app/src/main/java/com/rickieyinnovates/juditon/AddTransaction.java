@@ -10,7 +10,6 @@ import com.rickieyinnovates.juditon.listeners.BankDataListener;
 import com.rickieyinnovates.juditon.models.BankAccount;
 import com.rickieyinnovates.juditon.models.Transaction;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -34,7 +33,12 @@ public class AddTransaction extends AppCompatActivity implements BankDataListene
         Button add = findViewById(R.id.addReceipt);
 
         try {
-            BanksFragment.getAllBanks(this, this);
+            List<BankAccount> bankAccountList = ApiDataManager.getInstance().getBankAccounts();
+            if (bankAccountList == null) {
+                BanksFragment.getAllBanks(this, this);
+            } else {
+                populateBanksSpinner(this, bankAccountList);
+            }
         } catch (Exception e) {
             Log.e(TAG, "onCreate: ", e.fillInStackTrace());
         }
@@ -65,8 +69,12 @@ public class AddTransaction extends AppCompatActivity implements BankDataListene
     @Override
     public void onBankDataReceived(Context context, List<BankAccount> bankAccountList) {
         Log.d(TAG, "onCreate: banks: " + bankAccountList);
+        populateBanksSpinner(context, bankAccountList);
+    }
+
+    private void populateBanksSpinner(Context context, List<BankAccount> bankAccountList) {
         List<String> accountNames = bankAccountList.stream().map(BankAccount::getAccountName).collect(Collectors.toList());
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, accountNames);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(context, android.R.layout.simple_spinner_dropdown_item, accountNames);
         paidvia.setAdapter(arrayAdapter);
     }
 }

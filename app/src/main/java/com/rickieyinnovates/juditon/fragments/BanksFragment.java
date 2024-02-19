@@ -15,7 +15,7 @@ import com.android.volley.VolleyError;
 import com.rickieyinnovates.juditon.ApiClient;
 import com.rickieyinnovates.juditon.listeners.BankDataListener;
 import com.rickieyinnovates.juditon.R;
-import com.rickieyinnovates.juditon.TokenManager;
+import com.rickieyinnovates.juditon.ApiDataManager;
 import com.rickieyinnovates.juditon.adapters.BanksAdapter;
 import com.rickieyinnovates.juditon.models.BankAccount;
 import org.json.JSONArray;
@@ -73,8 +73,8 @@ public class BanksFragment extends Fragment implements BankDataListener {
 
                     bankDataListener.onBankDataReceived(context, bankAccountList);
 
-                    TokenManager tokenManager = TokenManager.getInstance();
-                    tokenManager.setBankAccounts(bankAccountList);
+                    ApiDataManager apiDataManager = ApiDataManager.getInstance();
+                    apiDataManager.setBankAccounts(bankAccountList);
 
                 } catch (Exception e) {
                     Log.e(TAG, "onSuccess: " + e.getLocalizedMessage());

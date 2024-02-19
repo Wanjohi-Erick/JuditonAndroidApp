@@ -1,5 +1,6 @@
 package com.rickieyinnovates.juditon.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -14,6 +15,7 @@ import com.android.volley.VolleyError;
 import com.rickieyinnovates.juditon.ApiClient;
 import com.rickieyinnovates.juditon.R;
 import com.rickieyinnovates.juditon.adapters.AccountsAdapter;
+import com.rickieyinnovates.juditon.listeners.AccountsDataListener;
 import com.rickieyinnovates.juditon.models.Account;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -21,17 +23,29 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AccountsFragment extends Fragment {
+public class AccountsFragment extends Fragment implements AccountsDataListener {
+    RecyclerView recyclerView;
 
     private static final String TAG = "AccountsFragment";
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_accounts, container, false);
-        RecyclerView recyclerView = root.findViewById(R.id.accountsRecycler);
+        recyclerView = root.findViewById(R.id.accountsRecycler);
+
+        try {
+            getAllAccounts(root.getContext(), this);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreateView: ", e.fillInStackTrace());
+        }
+
+        return root;
+    }
+
+    public static void getAllAccounts(Context context, AccountsDataListener listener) {
         List<Account> accountList = new ArrayList<>();
 
-        ApiClient apiClient = new ApiClient(root.getContext());
-        apiClient.makeAuthenticatedGetRequest(root.getContext(), "/finance/chart/get/all", new ApiClient.Callback() {
+        ApiClient apiClient = new ApiClient(context);
+        apiClient.makeAuthenticatedGetRequest(context, "/finance/chart/get/all", new ApiClient.Callback() {
             @Override
             public void onSuccess(String response) {
                 Log.d(TAG, "onSuccess: response: " + response);
@@ -46,10 +60,7 @@ public class AccountsFragment extends Fragment {
                         accountList.add(account);
                     }
 
-                    AccountsAdapter accountsAdapter = new AccountsAdapter(accountList);
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-                    recyclerView.setAdapter(accountsAdapter);
+                    listener.onAccountsDataReceived(context, accountList);
 
                 } catch (Exception e) {
                     Log.e(TAG, "onSuccess: " + e.getLocalizedMessage());
@@ -59,15 +70,21 @@ public class AccountsFragment extends Fragment {
             @Override
             public void onError(VolleyError error) {
                 Log.d(TAG, "onError: " + error);
-                Toast.makeText(root.getContext(), error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-        return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onAccountsDataReceived(Context context, List<Account> accountList) {
+        AccountsAdapter accountsAdapter = new AccountsAdapter(accountList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(accountsAdapter);
     }
 }

@@ -1,5 +1,6 @@
 package com.rickieyinnovates.juditon.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,10 +13,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import com.android.volley.VolleyError;
 import com.rickieyinnovates.juditon.ApiClient;
+import com.rickieyinnovates.juditon.listeners.BankDataListener;
 import com.rickieyinnovates.juditon.R;
-import com.rickieyinnovates.juditon.adapters.AccountsAdapter;
+import com.rickieyinnovates.juditon.TokenManager;
 import com.rickieyinnovates.juditon.adapters.BanksAdapter;
-import com.rickieyinnovates.juditon.models.Account;
 import com.rickieyinnovates.juditon.models.BankAccount;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -23,7 +24,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BanksFragment extends Fragment {
+public class BanksFragment extends Fragment implements BankDataListener {
+
+    RecyclerView recyclerView;
 
     private static final String TAG = "BanksFragment";
 
@@ -31,11 +34,23 @@ public class BanksFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         View root = inflater.inflate(R.layout.fragment_banks, container, false);
-        RecyclerView recyclerView = root.findViewById(R.id.banksRecycler);
-        List<BankAccount> bankAccountList = new ArrayList<>();
 
-        ApiClient apiClient = new ApiClient(root.getContext());
-        apiClient.makeAuthenticatedGetRequest(root.getContext(), "/finance/banking/get/all", new ApiClient.Callback() {
+        recyclerView = root.findViewById(R.id.banksRecycler);
+
+        try {
+            getAllBanks(root.getContext(), this);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreateView: ", e.fillInStackTrace());
+        }
+
+
+        return root;
+    }
+
+    public static void getAllBanks(Context context, BankDataListener bankDataListener) {
+        List<BankAccount> bankAccountList = new ArrayList<>();
+        ApiClient apiClient = new ApiClient(context);
+        apiClient.makeAuthenticatedGetRequest(context, "/finance/banking/get/all", new ApiClient.Callback() {
             @Override
             public void onSuccess(String response) {
                 Log.d(TAG, "onSuccess: response: " + response);
@@ -48,15 +63,18 @@ public class BanksFragment extends Fragment {
                         String accountNumber = jsonObject.getString("account");
                         String bankName = jsonObject.getString("bankName");
                         String type = jsonObject.getString("type");
+                        JSONArray transactionsArray = jsonObject.getJSONArray("accounttransactions");
+
 
                         BankAccount bankAccount = new BankAccount(id, accountName, accountNumber, bankName, type, 0.00);
                         bankAccountList.add(bankAccount);
+                        Log.d(TAG, "onSuccess: bank: " + bankAccount);
                     }
 
-                    BanksAdapter banksAdapter = new BanksAdapter(bankAccountList);
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(root.getContext()));
-                    recyclerView.setAdapter(banksAdapter);
+                    bankDataListener.onBankDataReceived(context, bankAccountList);
+
+                    TokenManager tokenManager = TokenManager.getInstance();
+                    tokenManager.setBankAccounts(bankAccountList);
 
                 } catch (Exception e) {
                     Log.e(TAG, "onSuccess: " + e.getLocalizedMessage());
@@ -66,14 +84,21 @@ public class BanksFragment extends Fragment {
             @Override
             public void onError(VolleyError error) {
                 Log.d(TAG, "onError: " + error);
-                Toast.makeText(root.getContext(), error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, error.getLocalizedMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-        return root;
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+    }
+
+    @Override
+    public void onBankDataReceived(Context context, List<BankAccount> bankAccountList) {
+        BanksAdapter banksAdapter = new BanksAdapter(bankAccountList);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        recyclerView.setAdapter(banksAdapter);
     }
 }

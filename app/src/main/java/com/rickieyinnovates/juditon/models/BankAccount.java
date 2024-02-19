@@ -71,4 +71,16 @@ public class BankAccount {
     public void setBalance(Double balance) {
         this.balance = balance;
     }
+
+    @Override
+    public String toString() {
+        return "BankAccount{" +
+                "id=" + id +
+                ", accountName='" + accountName + '\'' +
+                ", account='" + account + '\'' +
+                ", bankName='" + bankName + '\'' +
+                ", type='" + type + '\'' +
+                ", balance=" + balance +
+                '}';
+    }
 }

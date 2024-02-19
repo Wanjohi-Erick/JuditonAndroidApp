@@ -1,17 +1,22 @@
 package com.rickieyinnovates.juditon;
 
+import android.content.Context;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.TextView;
+import android.widget.*;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.rickieyinnovates.juditon.fragments.BanksFragment;
+import com.rickieyinnovates.juditon.listeners.BankDataListener;
+import com.rickieyinnovates.juditon.models.BankAccount;
 import com.rickieyinnovates.juditon.models.Transaction;
 
-public class AddTransaction extends AppCompatActivity {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class AddTransaction extends AppCompatActivity implements BankDataListener {
     private static final String TAG = "AddTransaction";
+    Spinner paidvia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,7 +24,6 @@ public class AddTransaction extends AppCompatActivity {
         setContentView(R.layout.activity_add_transaction);
 
         EditText mpesa, date, received, details, trans;
-        Spinner paidvia;
 
         mpesa = findViewById(R.id.mpesa);
         date = findViewById(R.id.receipt_date);
@@ -28,6 +32,12 @@ public class AddTransaction extends AppCompatActivity {
         trans = findViewById(R.id.transRef);
         paidvia = findViewById(R.id.bankSpinner);
         Button add = findViewById(R.id.addReceipt);
+
+        try {
+            BanksFragment.getAllBanks(this, this);
+        } catch (Exception e) {
+            Log.e(TAG, "onCreate: ", e.fillInStackTrace());
+        }
 
         mpesa.setOnEditorActionListener((v, actionId, event) -> {
 
@@ -50,5 +60,13 @@ public class AddTransaction extends AppCompatActivity {
         });
 
 
+    }
+
+    @Override
+    public void onBankDataReceived(Context context, List<BankAccount> bankAccountList) {
+        Log.d(TAG, "onCreate: banks: " + bankAccountList);
+        List<String> accountNames = bankAccountList.stream().map(BankAccount::getAccountName).collect(Collectors.toList());
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, accountNames);
+        paidvia.setAdapter(arrayAdapter);
     }
 }

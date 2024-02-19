@@ -65,8 +65,20 @@ public class BanksFragment extends Fragment implements BankDataListener {
                         String type = jsonObject.getString("type");
                         JSONArray transactionsArray = jsonObject.getJSONArray("accounttransactions");
 
+                        double balance = 0.00;
 
-                        BankAccount bankAccount = new BankAccount(id, accountName, accountNumber, bankName, type, 0.00);
+                        for (int j = 0; j < transactionsArray.length(); j++) {
+                            JSONObject tr = transactionsArray.getJSONObject(j);
+                            double debit = tr.isNull("debit") ? 0.00 : tr.getDouble("debit");
+                            double credit = tr.isNull("credit") ? 0.00 : tr.getDouble("credit");
+
+
+                            double bal = credit-debit;
+                            balance += bal;
+                        }
+
+
+                        BankAccount bankAccount = new BankAccount(id, accountName, accountNumber, bankName, type, balance);
                         bankAccountList.add(bankAccount);
                         Log.d(TAG, "onSuccess: bank: " + bankAccount);
                     }

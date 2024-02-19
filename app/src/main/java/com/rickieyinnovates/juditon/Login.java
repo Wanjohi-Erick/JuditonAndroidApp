@@ -1,19 +1,23 @@
 package com.rickieyinnovates.juditon;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import com.google.android.material.snackbar.Snackbar;
 
 public class Login extends AppCompatActivity {
 
     EditText usernameEdit, passwordEdit;
     private static final String TAG = "Login";
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +30,9 @@ public class Login extends AppCompatActivity {
         }
 
 
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setTitle("Loading");
+        progressDialog.setMessage("Please wait ...");
         usernameEdit = findViewById(R.id.username);
         passwordEdit = findViewById(R.id.password);
 
@@ -48,26 +55,31 @@ public class Login extends AppCompatActivity {
                 return;
             }
 
-            goToLogin(username, password);
+            goToLogin(view, username, password);
         });
 
     }
 
-    private void goToLogin(String username, String password) {
+    private void goToLogin(View view, String username, String password) {
+        progressDialog.show();
         ApiClient apiRequest = new ApiClient(this);
 
         apiRequest.login(username, password, "/api/auth/signin", new ApiClient.LoginCallback() {
             @Override
             public void onLoginSuccess(String authToken) {
+                progressDialog.dismiss();
+
+                Snackbar.make(view, "Login successful", Snackbar.LENGTH_SHORT).show();
+
                 Intent toDashboardIntent = new Intent(getApplicationContext(), Dashboard.class);
                 startActivity(toDashboardIntent);
             }
 
             @Override
             public void onLoginError(String errorMessage) {
+                progressDialog.dismiss();
                 Log.e(TAG, errorMessage);
-                Toast.makeText(Login.this, errorMessage, Toast.LENGTH_SHORT).show();
-                // Handle login error, e.g., display an error message to the user
+                Snackbar.make(view, errorMessage, Snackbar.LENGTH_LONG).show();
             }
         });
     }

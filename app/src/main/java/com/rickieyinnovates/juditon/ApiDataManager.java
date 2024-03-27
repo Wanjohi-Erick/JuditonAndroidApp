@@ -2,9 +2,16 @@ package com.rickieyinnovates.juditon;
 
 import com.rickieyinnovates.juditon.models.Account;
 import com.rickieyinnovates.juditon.models.BankAccount;
+import com.rickieyinnovates.juditon.models.Receipt;
+import com.rickieyinnovates.juditon.models.Voucher;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
+
+@Getter
+@Setter
 public class ApiDataManager {
     private static ApiDataManager instance;
     private String authToken;
@@ -13,6 +20,10 @@ public class ApiDataManager {
     private List<BankAccount> bankAccounts;
 
     private List<Account> accountList;
+
+    private List<Receipt> receiptList;
+
+    private List<Voucher> voucherList;
     private ApiDataManager() {
     }
 
@@ -23,35 +34,5 @@ public class ApiDataManager {
         return instance;
     }
 
-    public void setAuthToken(String token) {
-        this.authToken = token;
-    }
 
-    public String getAuthToken() {
-        return authToken;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public List<BankAccount> getBankAccounts() {
-        return bankAccounts;
-    }
-
-    public void setBankAccounts(List<BankAccount> bankAccounts) {
-        this.bankAccounts = bankAccounts;
-    }
-
-    public List<Account> getAccountList() {
-        return accountList;
-    }
-
-    public void setAccountList(List<Account> accountList) {
-        this.accountList = accountList;
-    }
 }

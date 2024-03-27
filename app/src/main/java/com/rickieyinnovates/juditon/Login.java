@@ -78,6 +78,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onLoginError(String errorMessage) {
                 progressDialog.dismiss();
+                errorMessage = errorMessage != null ? errorMessage : "error";
                 Log.e(TAG, errorMessage);
                 Snackbar.make(view, errorMessage, Snackbar.LENGTH_LONG).show();
             }

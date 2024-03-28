@@ -3,8 +3,10 @@ package com.rickieyinnovates.juditon;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
+import android.widget.TextView;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatDelegate;
 import com.google.android.material.snackbar.Snackbar;
@@ -21,6 +23,8 @@ public class Dashboard extends AppCompatActivity {
 
     private AppBarConfiguration mAppBarConfiguration;
     private ActivityMainBinding binding;
+
+    private static final String TAG = "Dashboard";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,10 +54,14 @@ public class Dashboard extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
-
-        /*TextView usernameView = findViewById(R.id.textView);
-        TokenManager tokenManager = TokenManager.getInstance();
-        usernameView.setText(tokenManager.getUsername());*/
+        View headerView = navigationView.getHeaderView(0);
+        TextView usernameView = headerView.findViewById(R.id.usernameView);
+        TextView emailView = headerView.findViewById(R.id.emailView);
+        ApiDataManager apiDataManager = ApiDataManager.getInstance();
+        String username = apiDataManager.getUsername();
+        Log.i(TAG, "onCreate: username: " + username);
+        usernameView.setText(username);
+        emailView.setText(apiDataManager.getEmail());
 
     }
 

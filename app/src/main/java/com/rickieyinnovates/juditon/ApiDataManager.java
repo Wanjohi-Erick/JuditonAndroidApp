@@ -16,6 +16,7 @@ public class ApiDataManager {
     private static ApiDataManager instance;
     private String authToken;
     private String username;
+    private String email;
 
     private List<BankAccount> bankAccounts;
 

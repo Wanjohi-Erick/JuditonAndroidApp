@@ -68,6 +68,7 @@ public class Login extends AppCompatActivity {
             @Override
             public void onLoginSuccess(String authToken) {
                 progressDialog.dismiss();
+                Log.i(TAG, "onLoginSuccess: token: " + authToken);
 
                 Snackbar.make(view, "Login successful", Snackbar.LENGTH_SHORT).show();
 

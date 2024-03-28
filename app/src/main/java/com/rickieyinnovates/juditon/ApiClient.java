@@ -39,11 +39,13 @@ public class ApiClient {
                     try {
                         String authToken = response.getString("token");
                         String name = response.getString("username");
+                        String email = response.getString("email");
 
                         apiDataManager.setAuthToken(authToken);
                         apiDataManager.setUsername(name);
+                        apiDataManager.setEmail(email);
 
-                        Log.d(TAG, "login name: " + name);
+                        Log.d(TAG, "login response: " + response);
 
                         callback.onLoginSuccess(authToken);
                     } catch (JSONException e) {

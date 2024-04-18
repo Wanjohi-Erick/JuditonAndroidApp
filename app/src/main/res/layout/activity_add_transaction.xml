@@ -9,6 +9,7 @@
     <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:id="@+id/fragment_container"
             android:orientation="vertical"
             android:gravity="center">
 
@@ -99,6 +100,36 @@
                   android:layout_margin="@dimen/margin"
                   android:padding="@dimen/padding"
                   android:inputType="textCapCharacters"/>
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:weightSum="1.25"
+                      android:orientation="horizontal">
+
+            <TextView android:layout_width="0dp"
+                      android:layout_height="wrap_content"
+                      android:text="Total Payable: 0.00"
+                      android:id="@+id/totalReceiptView"
+                      android:textSize="18sp"
+                      android:layout_weight="1"
+                      android:layout_margin="@dimen/margin"
+                      android:padding="@dimen/padding"
+                      android:textStyle="bold"/>
+
+            <Button
+                    android:id="@+id/addRowBtn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.25"
+                    android:layout_gravity="center"
+                    android:drawableEnd="@drawable/baseline_add_24"
+                    android:layout_margin="@dimen/margin"/>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/addReceiptRecyclerView"/>
 
         <Button android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
